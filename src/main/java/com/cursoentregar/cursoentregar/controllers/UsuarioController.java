@@ -2,6 +2,8 @@ package com.cursoentregar.cursoentregar.controllers;
 
 import com.cursoentregar.cursoentregar.dao.UsuarioDao;
 import com.cursoentregar.cursoentregar.models.Usuario;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,11 @@ public class UsuarioController {
 
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
     public void registrarUsuario(@RequestBody Usuario u) {
+
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        String hash = argon2.hash(1, 1024, 1, u.getPassword());
+        u.setPassword(hash);
+
         usuarioDao.registrar(u);
     }
 
