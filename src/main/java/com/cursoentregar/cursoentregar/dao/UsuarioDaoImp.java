@@ -33,4 +33,14 @@ public class UsuarioDaoImp implements UsuarioDao {
         entityManager.merge(u);
     }
 
+    @Override
+    public boolean verificarCredenciales(Usuario u) {
+        String query = "FROM Usuario WHERE email = :email AND password = :password ";
+        List<Usuario> lista = entityManager.createQuery(query, Usuario.class)
+                .setParameter("email", u.getEmail())
+                .setParameter("password", u.getPassword())
+                .getResultList();
+        return !lista.isEmpty();
+    }
+
 }
